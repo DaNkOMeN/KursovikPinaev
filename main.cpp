@@ -92,10 +92,14 @@ void resetQueen(int i, int j, int vert, int gor, int **board)
 
 bool tryQueen(int i, int vert, int gor, int **board, int QN,int counter)
 {
-    bool result = false ;
     if (counter > QN)
     {
         return true;
+    }
+    bool result = false ;
+    if (i >= vert)
+    {
+        return false;
     }
     else
     {
@@ -105,9 +109,18 @@ bool tryQueen(int i, int vert, int gor, int **board, int QN,int counter)
           {
             setQueen(i,j,vert,gor,board);
             bool nextDone = tryQueen(i + 1,vert,gor,board,QN,counter + 1);
+
             if (nextDone != true)
             {
-               resetQueen(i,j,vert,gor,board);
+               bool nextDone2 = tryQueen(i + 2,vert,gor,board,QN,counter + 1);
+               if (nextDone2 == false)
+               {
+                   resetQueen(i,j,vert,gor,board);
+               }
+               else
+                {
+                    return true;
+                }
             }
             else
             {
@@ -134,7 +147,7 @@ void printpole(int **board, int vert, int gor, int **board2)
             }
             else
             {
-                if (board2[i][j] == 1){
+                if (board[i][j] < -1){
                     setfillstyle(1, 6);
                     bar(j * mash, i * mash,(j + 1) * mash,(i + 1) * mash);
                 }
@@ -200,16 +213,16 @@ int main ()
                 cout << "Введите координаты клетки:" << endl;
                 cin >> i1;
                 cin >> j1;
-                board2[i1-1][j1-1] = 1;
+                board[i1-1][j1-1] = -10;
             }
 
-            tryQueen(0, vert, gor, board, QN,0);
-            for (int i = 0; i < vert; i ++)
+            tryQueen(0, vert, gor, board, QN,1);
+           /* for (int i = 0; i < vert; i ++)
             {
                 for (int j = 0; j < gor; j ++)
                     cout << board[i][j]<<' ';
                 cout << endl;
-            }
+            }*/
             initwindow(gor * mash, vert * mash);
             printpole(board, vert, gor,board2);
         }
